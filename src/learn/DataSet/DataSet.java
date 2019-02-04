@@ -16,7 +16,7 @@ public class DataSet {
         List<double[]> dataSet = new ArrayList<>();
         List type = new ArrayList<String>();
         try {
-            FileReader irisFile = new FileReader("iris.txt");
+            FileReader irisFile = new FileReader("src/learn/DataSet/iris.txt");
             BufferedReader reader = new BufferedReader(irisFile);
             String line = reader.readLine();
             while(line!=null){
@@ -29,13 +29,13 @@ public class DataSet {
 
                 switch (ss[i]) {
                     case "Iris-setosa":
-                        data[i] = 1;
+                        data[i] = 0;
                         break;
                     case "Iris-versicolor":
-                        data[i] = 2;
+                        data[i] = 1;
                         break;
                     case "Iris-virginica":
-                        data[i] = 3;
+                        data[i] = 2;
                         break;
                     default:
                         data[i] = -1;
@@ -52,4 +52,5 @@ public class DataSet {
         }
         return new BaseSet(type, dataSet);
     }
+
 }

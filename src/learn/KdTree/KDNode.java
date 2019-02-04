@@ -10,36 +10,75 @@ import learn.MyUtil;
 import java.util.List;
 
 public class KDNode {
-    private int dim = -1;
-    private double[] data;
-    private KDNode left;
-    private KDNode right;
-    private KDNode parent;
+    private int ki = 0;//
+    private double[] data;//最后一个数据默认为label
+    private double kv;
+    private KDNode left = null;
+    private KDNode right = null;
+    private KDNode parent = null;
 
     public KDNode(List<double[]> dataSet){
-        assert dataSet.isEmpty();
-
         if (dataSet.size() == 1){
             data = dataSet.get(0);
         }else{
             //找到方差最大的轴
             double maxS = MyUtil.variance(dataSet,0);
-            dim = 0;
-            for (int i = 1; i < dataSet.get(0).length; i++) {
+            ki = 0;
+            //最后一个默认为label
+            for (int i = 1; i < dataSet.get(0).length-1; i++) {
                 double S = MyUtil.variance(dataSet,i);
                 if (S>maxS){
-                    dim = i;
+                    ki = i;
                     maxS = S;
                 }
             }
-            MyUtil.median(dataSet,dim);
-            int median = (dataSet.size()+1)/2;
+            MyUtil.sortData(dataSet,0,dataSet.size()-1, ki);
+            int median = (dataSet.size()-1)/2;
             data = dataSet.get(median);
-            left = new KDNode(dataSet.subList(0,median-1));
-            left.parent = this;
-            right = new KDNode(dataSet.subList(median+1,dataSet.size()-1));
+            kv = data[ki];
+            if (median>0){
+                left = new KDNode(dataSet.subList(0,median));
+                left.parent = this;
+            }
+            right = new KDNode(dataSet.subList(median+1,dataSet.size()));
             right.parent = this;
         }
     };
+    public double LL2distance(double[] target){
+        assert data.length!=target.length;
+        double res = 0;
+        for (int i = 0; i < data.length-1; i++) {
+            //最后一个为lable
+            res+=(data[i]-target[i])*(data[i]-target[i]);
+        }
+        return res;
+    }
 
+    public int getType(){
+        return (int)data[data.length-1];
+    }
+
+    public int getKi() {
+        return ki;
+    }
+
+    public double[] getData() {
+        return data;
+    }
+
+    public double getKv() {
+        return kv;
+    }
+
+    public KDNode getLeft() {
+        return left;
+    }
+
+    public KDNode getRight() {
+        return right;
+    }
+
+    public KDNode getParent() {
+        return parent;
+    }
 }
